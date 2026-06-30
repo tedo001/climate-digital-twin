@@ -1,0 +1,60 @@
+# Model Registry — ModelManager resolves architecture + checkpoint by name.
+# Checkpoints are gitignored binary files; this registry is what makes a
+# model "exist" from the system's point of view even before training.
+models:
+  - name: monsoon_lstm
+    display_name: "Monsoon Precipitation LSTM"
+    architecture_class: "ai.models.architectures.monsoon_lstm.MonsoonLSTM"
+    checkpoint_filename: "monsoon_lstm_v1.pt"
+    target_variable: precipitation
+    supported_horizons_days: [1, 3, 7, 14]
+    input_features:
+      - temperature_2m
+      - relative_humidity
+      - wind_speed_10m
+      - soil_moisture
+      - precipitation_lag_1
+      - precipitation_lag_7
+    version: "0.1.0"
+    hyperparameters:
+      input_size: 6
+      hidden_size: 64
+      num_layers: 2
+      dropout: 0.2
+
+  - name: drought_cnn
+    display_name: "Drought Risk CNN"
+    architecture_class: "ai.models.architectures.drought_cnn.DroughtCNN"
+    checkpoint_filename: "drought_cnn_v1.pt"
+    target_variable: soil_moisture
+    supported_horizons_days: [7, 14, 30]
+    input_features:
+      - soil_moisture
+      - precipitation
+      - temperature_2m
+      - ndvi
+    version: "0.1.0"
+    hyperparameters:
+      in_channels: 4
+      base_filters: 16
+      num_conv_blocks: 3
+
+  - name: temp_transformer
+    display_name: "Temperature Trend Transformer"
+    architecture_class: "ai.models.architectures.temp_transformer.TemperatureTransformer"
+    checkpoint_filename: "temp_transformer_v1.pt"
+    target_variable: temperature_2m
+    supported_horizons_days: [1, 3, 7]
+    input_features:
+      - temperature_2m
+      - surface_pressure
+      - relative_humidity
+      - wind_speed_10m
+    version: "0.1.0"
+    hyperparameters:
+      input_size: 4
+      d_model: 32
+      nhead: 4
+      num_layers: 2
+      dim_feedforward: 64
+      dropout: 0.1

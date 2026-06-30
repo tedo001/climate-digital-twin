@@ -1,0 +1,45 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard:
+    format: "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: standard
+    stream: ext://sys.stdout
+    level: INFO
+  file:
+    class: logging.handlers.RotatingFileHandler
+    formatter: standard
+    filename: logs/climate_twin.log
+    maxBytes: 5242880
+    backupCount: 3
+    level: DEBUG
+
+root:
+  handlers: [console, file]
+  level: INFO
+
+loggers:
+  app:
+    level: INFO
+    propagate: true
+  climate:
+    level: INFO
+    propagate: true
+  ai:
+    level: INFO
+    propagate: true
+  simulation:
+    level: INFO
+    propagate: true
+  data:
+    level: INFO
+    propagate: true
+  storage:
+    level: INFO
+    propagate: true

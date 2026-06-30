@@ -1,0 +1,19 @@
+services:
+  climate-digital-twin:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: climate-digital-twin:latest
+    container_name: climate-digital-twin
+    ports:
+      - "8501:8501"
+    environment:
+      CDT_ENVIRONMENT: production
+      CDT_LOG_LEVEL: INFO
+    volumes:
+      - ../storage/files:/opt/climate-digital-twin/storage/files
+      - ../storage/db:/opt/climate-digital-twin/storage/db
+      - ../storage/cache:/opt/climate-digital-twin/storage/cache
+      - ../ai/models/checkpoints:/opt/climate-digital-twin/ai/models/checkpoints
+      - ../logs:/opt/climate-digital-twin/logs
+    restart: unless-stopped

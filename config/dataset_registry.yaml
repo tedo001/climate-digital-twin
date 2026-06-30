@@ -1,0 +1,95 @@
+# Dataset Registry — single source of truth for ingestion connectors.
+# Adding a new dataset here (plus its connector class) requires no changes
+# to downstream layers (SAD Section 20).
+datasets:
+  - name: era5
+    display_name: "ERA5 Reanalysis (Copernicus CDS)"
+    connector_class: "data.ingestion.connectors.era5_connector.ERA5Connector"
+    variables: [temperature_2m, precipitation, surface_pressure, wind_speed_10m, relative_humidity]
+    temporal_resolution: hourly
+    spatial_resolution_deg: 0.25
+    live_api_available: true
+    default_params:
+      product_type: reanalysis
+      format: netcdf
+
+  - name: nasa_power
+    display_name: "NASA POWER"
+    connector_class: "data.ingestion.connectors.nasa_power_connector.NASAPowerConnector"
+    variables: [temperature_2m, precipitation, relative_humidity, wind_speed_10m]
+    temporal_resolution: daily
+    spatial_resolution_deg: 0.5
+    live_api_available: true
+    default_params:
+      community: AG
+      format: json
+
+  - name: sentinel
+    display_name: "Sentinel (Copernicus Sentinel-1/2/3)"
+    connector_class: "data.ingestion.connectors.sentinel_connector.SentinelConnector"
+    variables: [ndvi, cloud_cover]
+    temporal_resolution: 5-day
+    spatial_resolution_deg: 0.001
+    live_api_available: true
+    default_params:
+      collection: sentinel-2-l2a
+
+  - name: modis
+    display_name: "MODIS (Terra/Aqua)"
+    connector_class: "data.ingestion.connectors.modis_connector.MODISConnector"
+    variables: [ndvi, sea_surface_temperature, cloud_cover]
+    temporal_resolution: 16-day
+    spatial_resolution_deg: 0.01
+    live_api_available: true
+    default_params:
+      product: MOD13Q1
+
+  - name: gpm
+    display_name: "GPM IMERG Precipitation"
+    connector_class: "data.ingestion.connectors.gpm_connector.GPMConnector"
+    variables: [precipitation]
+    temporal_resolution: 30-minute
+    spatial_resolution_deg: 0.1
+    live_api_available: true
+    default_params:
+      product: GPM_3IMERGHH
+
+  - name: smap
+    display_name: "SMAP Soil Moisture"
+    connector_class: "data.ingestion.connectors.smap_connector.SMAPConnector"
+    variables: [soil_moisture]
+    temporal_resolution: 3-day
+    spatial_resolution_deg: 0.09
+    live_api_available: true
+    default_params:
+      product: SPL3SMP_E
+
+  - name: insat
+    display_name: "INSAT-3D/3DR (ISRO/MOSDAC)"
+    connector_class: "data.ingestion.connectors.insat_connector.INSATConnector"
+    variables: [cloud_cover, temperature_2m]
+    temporal_resolution: 30-minute
+    spatial_resolution_deg: 0.04
+    live_api_available: false
+    default_params:
+      note: "Architecture ready; public API access currently limited."
+
+  - name: oceansat
+    display_name: "Oceansat-3 (ISRO/MOSDAC)"
+    connector_class: "data.ingestion.connectors.oceansat_connector.OceansatConnector"
+    variables: [sea_surface_temperature]
+    temporal_resolution: daily
+    spatial_resolution_deg: 0.02
+    live_api_available: false
+    default_params:
+      note: "Architecture ready; public API access currently limited."
+
+  - name: imd
+    display_name: "India Meteorological Department (Ground Stations)"
+    connector_class: "data.ingestion.connectors.imd_connector.IMDConnector"
+    variables: [temperature_2m, precipitation, relative_humidity, wind_speed_10m]
+    temporal_resolution: hourly
+    spatial_resolution_deg: null
+    live_api_available: false
+    default_params:
+      note: "Architecture ready; bulk public API access currently limited."

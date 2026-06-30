@@ -1,0 +1,85 @@
+[importlinter]
+root_packages =
+    app
+    core
+    climate
+    ai
+    simulation
+    visualization
+    data
+    storage
+    config
+    utils
+
+[importlinter:contract:1]
+name = Utility layer imports no one
+type = forbidden
+source_modules =
+    utils
+forbidden_modules =
+    app
+    core
+    climate
+    ai
+    simulation
+    visualization
+    data
+    storage
+    config
+
+[importlinter:contract:2]
+name = Config layer only depends on utils
+type = forbidden
+source_modules =
+    config
+forbidden_modules =
+    app
+    core
+    climate
+    ai
+    simulation
+    visualization
+    data
+    storage
+
+[importlinter:contract:3]
+name = Data and storage layers never import upward
+type = forbidden
+source_modules =
+    data
+    storage
+forbidden_modules =
+    app
+    core
+    climate
+    ai
+    simulation
+    visualization
+
+[importlinter:contract:4]
+name = Visualization never imports the AI layer directly
+type = forbidden
+source_modules =
+    visualization
+forbidden_modules =
+    ai
+
+[importlinter:contract:5]
+name = Presentation components never import climate/ai/simulation directly
+type = forbidden
+source_modules =
+    app.components
+    app.state
+forbidden_modules =
+    climate
+    ai
+    simulation
+
+# NOTE: app/pages/*.py files use Streamlit's numeric-prefix naming
+# convention (e.g. "1_Dashboard.py"), which makes them invalid Python
+# identifiers and therefore not importable as a package named "app.pages" —
+# import-linter cannot statically include them. The "AI never called
+# directly from Streamlit pages" rule (SAD Section 19 rule 6) is enforced
+# for these files instead via tests/unit/test_page_boundaries.py, which
+# parses each page file's AST and asserts it imports no climate/ai/simulation
+# module — only app.controllers and app.components.

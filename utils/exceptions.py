@@ -1,0 +1,120 @@
+"""Centralized exception hierarchy for the Climate Digital Twin.
+
+Every layer raises subclasses of :class:`ClimateTwinError` so that
+Application-layer controllers can catch a single family of exceptions and
+translate them into user-facing messages without leaking stack traces into
+the Streamlit UI (see SAD Section 16).
+"""
+
+from __future__ import annotations
+
+
+class ClimateTwinError(Exception):
+    """Base exception for every error raised within the Climate Digital Twin.
+
+    Args:
+        message: Human-readable description of the failure.
+        details: Optional structured context (e.g. dataset name, file path)
+            useful for logging but not necessarily shown to end users.
+    """
+
+    def __init__(self, message: str, details: dict[str, object] | None = None) -> None:
+        super().__init__(message)
+        self.message = message
+        self.details: dict[str, object] = details or {}
+
+    def __str__(self) -> str:
+        if self.details:
+            return f"{self.message} | details={self.details}"
+        return self.message
+
+
+# --------------------------------------------------------------------------- #
+# Data Ingestion Layer
+# --------------------------------------------------------------------------- #
+class DataIngestionError(ClimateTwinError):
+    """Raised when a dataset cannot be downloaded, read, or parsed."""
+
+
+class DatasetNotFoundError(DataIngestionError):
+    """Raised when a requested dataset is missing from the registry or disk."""
+
+
+class SchemaValidationError(DataIngestionError):
+    """Raised when ingested data fails structural or semantic validation."""
+
+
+class IntegrityCheckError(DataIngestionError):
+    """Raised when a downloaded file fails a checksum / integrity check."""
+
+
+class ConnectorNotImplementedError(DataIngestionError):
+    """Raised when a data source connector's live API path is not yet available.
+
+    Used by connectors whose architecture is ready (per SAD scope) but whose
+    upstream public API access is currently limited or unavailable (e.g.
+    INSAT, Oceansat, IMD), so the failure is explicit rather than silent.
+    """
+
+
+# --------------------------------------------------------------------------- #
+# Climate Intelligence Layer
+# --------------------------------------------------------------------------- #
+class AssimilationError(ClimateTwinError):
+    """Raised when the assimilation engine cannot fuse observations into state."""
+
+
+class StateValidationError(AssimilationError):
+    """Raised when a constructed ClimateState fails validation checks."""
+
+
+class StateNotFoundError(ClimateTwinError):
+    """Raised when no persisted ClimateState version can be located."""
+
+
+# --------------------------------------------------------------------------- #
+# AI Layer
+# --------------------------------------------------------------------------- #
+class ModelError(ClimateTwinError):
+    """Base exception for AI model lifecycle and inference failures."""
+
+
+class ModelNotLoadedError(ModelError):
+    """Raised when inference is requested before a model checkpoint is loaded."""
+
+
+class InferenceError(ModelError):
+    """Raised when a forward pass or post-processing step fails."""
+
+
+# --------------------------------------------------------------------------- #
+# Simulation Layer
+# --------------------------------------------------------------------------- #
+class SimulationError(ClimateTwinError):
+    """Raised when a what-if scenario cannot be executed."""
+
+
+class InvalidScenarioParameterError(SimulationError):
+    """Raised when scenario parameters fail validation."""
+
+
+# --------------------------------------------------------------------------- #
+# Visualization Layer
+# --------------------------------------------------------------------------- #
+class VisualizationError(ClimateTwinError):
+    """Raised when a figure/map object cannot be constructed from domain data."""
+
+
+# --------------------------------------------------------------------------- #
+# Storage / Configuration Layer
+# --------------------------------------------------------------------------- #
+class StorageError(ClimateTwinError):
+    """Raised for database or file-cache I/O failures."""
+
+
+class ConfigurationError(ClimateTwinError):
+    """Raised when application configuration is missing or invalid."""
+
+
+class CacheError(StorageError):
+    """Raised when a cache read/write operation fails unexpectedly."""
