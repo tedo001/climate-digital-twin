@@ -23,6 +23,9 @@ FILES_DIR: Path = STORAGE_DIR / "files"
 RAW_DATA_DIR: Path = FILES_DIR / "raw"
 PROCESSED_DATA_DIR: Path = FILES_DIR / "processed"
 EXPORTS_DIR: Path = FILES_DIR / "exports"
+# Serialized ClimateState snapshot payloads (referenced by the DuckDB
+# ``historical_states`` table via ``payload_path``); see SAD Section 5.4.
+STATE_SNAPSHOTS_DIR: Path = FILES_DIR / "states"
 
 # --- Ingestion: downloaded datasets & their provenance metadata ---
 # Per the data-ingestion contract, raw downloads land under
@@ -56,6 +59,7 @@ ALL_RUNTIME_DIRS: tuple[Path, ...] = (
     RAW_DATA_DIR,
     PROCESSED_DATA_DIR,
     EXPORTS_DIR,
+    STATE_SNAPSHOTS_DIR,
     DATA_RAW_DIR,
     DATA_METADATA_DIR,
     DB_DIR,

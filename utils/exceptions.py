@@ -124,8 +124,20 @@ class StateValidationError(AssimilationError):
     """Raised when a constructed ClimateState fails validation checks."""
 
 
+class FusionError(AssimilationError):
+    """Raised when multi-source observation fusion cannot produce a value."""
+
+
+class BiasCorrectionError(AssimilationError):
+    """Raised when a bias-correction calibration is invalid or cannot apply."""
+
+
 class StateNotFoundError(ClimateTwinError):
     """Raised when no persisted ClimateState version can be located."""
+
+
+class StatePersistenceError(ClimateTwinError):
+    """Raised when a ClimateState snapshot cannot be serialized or stored."""
 
 
 # --------------------------------------------------------------------------- #
