@@ -24,8 +24,13 @@ class Settings(BaseSettings):
         nasa_power_base_url: Base URL for the NASA POWER REST API.
         era5_cds_url: Base URL for the Copernicus Climate Data Store API.
         sentinel_hub_base_url: Base URL for the Sentinel Hub API.
+        cds_api_key: Copernicus CDS API key for ERA5 (never hardcoded).
+        sentinel_client_id: Sentinel Hub OAuth client id.
+        sentinel_client_secret: Sentinel Hub OAuth client secret.
+        earthdata_token: NASA Earthdata bearer token (MODIS/GPM/SMAP).
         request_timeout_seconds: Default HTTP timeout for connector downloads.
         max_download_retries: Default retry count for connector downloads.
+        download_chunk_size_bytes: Streaming chunk size for file downloads.
         enable_disk_cache: Whether disk-backed caching is active.
         cache_ttl_seconds: Default time-to-live for cached datasets.
         default_forecast_horizon_days: Default prediction horizon.
@@ -54,8 +59,16 @@ class Settings(BaseSettings):
     oceansat_base_url: str = Field(default="https://mosdac.gov.in")
     imd_base_url: str = Field(default="https://mausam.imd.gov.in")
 
+    # External API credentials. All default to ``None`` so keys are never
+    # hardcoded; they are supplied purely through the environment / ``.env``.
+    cds_api_key: str | None = Field(default=None)
+    sentinel_client_id: str | None = Field(default=None)
+    sentinel_client_secret: str | None = Field(default=None)
+    earthdata_token: str | None = Field(default=None)
+
     request_timeout_seconds: float = Field(default=30.0, gt=0)
     max_download_retries: int = Field(default=3, ge=1, le=10)
+    download_chunk_size_bytes: int = Field(default=1_048_576, gt=0)
 
     enable_disk_cache: bool = Field(default=True)
     cache_ttl_seconds: int = Field(default=21_600, ge=0)

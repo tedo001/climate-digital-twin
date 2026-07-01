@@ -24,6 +24,14 @@ RAW_DATA_DIR: Path = FILES_DIR / "raw"
 PROCESSED_DATA_DIR: Path = FILES_DIR / "processed"
 EXPORTS_DIR: Path = FILES_DIR / "exports"
 
+# --- Ingestion: downloaded datasets & their provenance metadata ---
+# Per the data-ingestion contract, raw downloads land under
+# ``data/raw/<dataset>/`` and their sidecar metadata under
+# ``data/metadata/<dataset>/`` so provenance is stored separately from payloads.
+DATA_DIR: Path = PROJECT_ROOT / "data"
+DATA_RAW_DIR: Path = DATA_DIR / "raw"
+DATA_METADATA_DIR: Path = DATA_DIR / "metadata"
+
 # --- Storage: db & cache ---
 DB_DIR: Path = STORAGE_DIR / "db"
 DUCKDB_PATH: Path = DB_DIR / "climate_twin.duckdb"
@@ -48,6 +56,8 @@ ALL_RUNTIME_DIRS: tuple[Path, ...] = (
     RAW_DATA_DIR,
     PROCESSED_DATA_DIR,
     EXPORTS_DIR,
+    DATA_RAW_DIR,
+    DATA_METADATA_DIR,
     DB_DIR,
     MIGRATIONS_DIR,
     DISK_CACHE_DIR,

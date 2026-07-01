@@ -57,6 +57,23 @@ class ConnectorNotImplementedError(DataIngestionError):
     """
 
 
+class DownloadError(DataIngestionError):
+    """Raised when a network download fails after all retries are exhausted."""
+
+
+class MissingCredentialsError(DataIngestionError):
+    """Raised when a connector needs an API key/token that is not configured.
+
+    Credentials are always read from the environment via ``config.settings``;
+    this is raised (rather than silently proceeding) when a required key is
+    absent, so misconfiguration surfaces immediately and no secret is inlined.
+    """
+
+
+class UnsupportedVariableError(DataIngestionError):
+    """Raised when a requested variable is not offered by the target dataset."""
+
+
 # --------------------------------------------------------------------------- #
 # Climate Intelligence Layer
 # --------------------------------------------------------------------------- #
