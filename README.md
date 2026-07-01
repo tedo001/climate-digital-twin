@@ -47,7 +47,7 @@ cp .env.example .env                # optional, defaults work out of the box
 ## Running the App
 
 ```bash
-streamlit run app/main.py
+python -m streamlit run app/main.py
 ```
 
 The app is available at `http://localhost:8501`.
