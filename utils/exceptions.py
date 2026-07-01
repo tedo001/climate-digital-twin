@@ -75,6 +75,45 @@ class UnsupportedVariableError(DataIngestionError):
 
 
 # --------------------------------------------------------------------------- #
+# Data Processing Layer
+# --------------------------------------------------------------------------- #
+class DataProcessingError(ClimateTwinError):
+    """Base exception for the climate-processing pipeline (SAD Section 6)."""
+
+
+class UnsupportedFormatError(DataProcessingError):
+    """Raised when a file extension has no registered reader (not GeoTIFF/NetCDF)."""
+
+
+class RasterReadError(DataProcessingError):
+    """Raised when a GeoTIFF/NetCDF payload cannot be read or decoded."""
+
+
+class RasterProcessingError(DataProcessingError):
+    """Raised when a raster transform (reproject/clip/resample) cannot complete."""
+
+
+class TemporalAlignmentError(DataProcessingError):
+    """Raised when time series cannot be aligned onto a common temporal grid."""
+
+
+class NormalizationError(DataProcessingError):
+    """Raised when a normalization/unit-conversion step receives invalid input."""
+
+
+class FeatureEngineeringError(DataProcessingError):
+    """Raised when a derived feature cannot be computed from processed inputs."""
+
+
+class PipelineError(DataProcessingError):
+    """Raised when a processing pipeline step fails, wrapping the root cause."""
+
+
+class StateConstructionError(DataProcessingError):
+    """Raised when a standardized :class:`ClimateState` cannot be assembled."""
+
+
+# --------------------------------------------------------------------------- #
 # Climate Intelligence Layer
 # --------------------------------------------------------------------------- #
 class AssimilationError(ClimateTwinError):

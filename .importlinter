@@ -55,6 +55,18 @@ forbidden_modules =
     ai
     simulation
     visualization
+# core.models holds the shared, dependency-light domain dataclasses
+# (ClimateState, ClimateVariable, Region, DatasetMetadata) that the SAD
+# dependency table (Section 3) treats as the common domain layer. Data and
+# storage may consume these typed models — but nothing else in core (e.g.
+# core.decision, core.registry) — so the upward-dependency rule still holds
+# for every higher-level package.
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    data.** -> core.models
+    data.** -> core.models.*
+    storage.** -> core.models
+    storage.** -> core.models.*
 
 [importlinter:contract:4]
 name = Visualization never imports the AI layer directly
