@@ -22,6 +22,16 @@ storage/files/processed/*
 !storage/files/processed/.gitkeep
 storage/files/exports/*
 !storage/files/exports/.gitkeep
+
+# Ingested datasets & their sidecar metadata (downloaded at runtime)
+data/raw/*
+!data/raw/.gitkeep
+data/metadata/*
+!data/metadata/.gitkeep
+
+# Runtime caches
+storage/cache/.disk_cache/
+storage/cache/.raster_cache/
 ai/models/checkpoints/*.pt
 ai/models/checkpoints/*.pth
 *.duckdb
